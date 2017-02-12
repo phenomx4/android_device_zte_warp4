@@ -22,6 +22,7 @@ import android.os.AsyncResult;
 import android.os.Message;
 import android.os.Parcel;
 import com.android.internal.telephony.RIL;
+import static com.android.internal.telephony.RILConstants.*;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 import com.android.internal.telephony.uicc.IccCardStatus;
 
@@ -105,31 +106,20 @@ public class m8sprRIL extends RIL {
         return cardStatus;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void getCellInfoList(Message result) {
-        riljLog("getCellInfoList: not supported");
-        if (result != null) {
-            CommandException ex = new CommandException(
-                CommandException.Error.REQUEST_NOT_SUPPORTED);
-            AsyncResult.forMessage(result, null, ex);
-            result.sendToTarget();
-        }
-    }
+    public void
+    setNetworkSelectionModeManual(String operatorNumeric, Message response) {
+        RILRequest rr
+                = RILRequest.obtain(RIL_REQUEST_SET_NETWORK_SELECTION_MANUAL,
+                                    response);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setCellInfoListRate(int rateInMillis, Message response) {
-        riljLog("setCellInfoListRate: not supported");
-        if (response != null) {
-            CommandException ex = new CommandException(
-                CommandException.Error.REQUEST_NOT_SUPPORTED);
-            AsyncResult.forMessage(response, null, ex);
-            response.sendToTarget();
-        }
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                    + " " + operatorNumeric);
+
+        rr.mParcel.writeInt(2);
+        rr.mParcel.writeString(operatorNumeric);
+        rr.mParcel.writeString("2"); // NOCHANGE
+
+        send(rr);
     }
 }
