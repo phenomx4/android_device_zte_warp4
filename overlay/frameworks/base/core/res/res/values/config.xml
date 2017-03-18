@@ -362,7 +362,7 @@
     <bool name="config_enableMultiUserUI">true</bool>
 
     <!-- Is the device LTE capable -->
-    <bool name="config_lte_capable">true</bool>
+    <!-- <bool name="config_lte_capable">true</bool> -->
 
     <!-- Support for disabling to fetch APN from OMH card for some cdma carriers -->
     <bool name="config_fetch_apn_from_omh_card">false</bool>

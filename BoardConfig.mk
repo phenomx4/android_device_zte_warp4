@@ -75,15 +75,20 @@ BOARD_CHARGER_RES := device/zte/warp4/charger/res
 
 # QCOM
 TARGET_POWERHAL_VARIANT := qcom
+#TARGET_NO_ADAPTIVE_PLAYBACK := true
+#TARGET_USES_QCOM_BSP := true
 BOARD_USES_QCOM_HARDWARE := true
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
-COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE
+COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DCAMERA_VENDOR_L_COMPAT #-DQCOM_BSP #-DQCOM_COMPRESSED_AUDIO_ENABLED
 
 # Graphics
 BOARD_EGL_CFG := device/zte/warp4/prebuilt/egl.cfg
 USE_OPENGL_RENDERER := true
 TARGET_USES_GENLOCK := true
 TARGET_USES_ION := true
+#TARGET_USES_OVERLAY := true
+#TARGET_USES_SF_BYPASS := true
+#TARGET_USES_C2D_COMPOSITION := true
 TARGET_PROVIDES_LIBLIGHT := true
 
 # Enable WEBGL in WebKit
@@ -101,7 +106,7 @@ BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/zte/warp4/bluetooth
-BOARD_BLUEDROID_VENDOR_CONF := device/zte/warp4/bluetooth/vnd_awrp4.txt
+BOARD_BLUEDROID_VENDOR_CONF := device/zte/warp4/bluetooth/vnd_warp4.txt
 
 # Wifi
 TARGET_USES_WCNSS_CTRL          := true
@@ -122,7 +127,7 @@ WIFI_DRIVER_MODULE_PATH 	:= "/system/lib/modules/wlan.ko"
 WPA_SUPPLICANT_VERSION 		:= VER_0_8_X
 
 # RIL
-BOARD_RIL_CLASS := ../../../device/zte/warp4/ril
+#BOARD_RIL_CLASS := ../../../device/zte/warp4/ril
 
 # GPS
 BOARD_HAVE_NEW_QC_GPS := true
@@ -135,6 +140,9 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/msm_hsusb/gadget/lun%d
 
 # External apps on SD
 TARGET_EXTERNAL_APPS = sdcard1
+
+#BOARD_USES_SECURE_SERVICES := true
+#BOARD_USES_EXTRA_THERMAL_SENSOR := true
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
@@ -155,6 +163,7 @@ BOARD_USES_QC_TIME_SERVICES := true
 #     thermal-engine.te \
 #     time_daemon.te \
 #     ueventd.te
+
 
 # Recovery
 BOARD_KERNEL_RECOVERY_CMDLINE      := $(BOARD_KERNEL_CMDLINE)
@@ -182,8 +191,11 @@ RECOVERY_SDCARD_ON_DATA := true
 TW_ALWAYS_RMRF := true
 TW_CUSTOM_POWER_BUTTON := 107
 TW_DEFAULT_EXTERNAL_STORAGE := true
-TW_NO_REBOOT_BOOTLOADER := false
+TW_NO_REBOOT_BOOTLOADER := true
+#TW_NO_USB_STORAGE := true
 TW_FLASH_FROM_STORAGE := true
 TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 TW_MAX_BRIGHTNESS := 255
+#TW_NO_SCREEN_TIMEOUT := true
+#TW_NO_SCREEN_BLANK := true
 TW_INPUT_BLACKLIST := lis3dh_acc

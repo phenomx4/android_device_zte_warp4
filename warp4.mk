@@ -24,12 +24,14 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    camera.msm8226
+    camera.msm8226 \
+    Snap
 
 # GPS
 PRODUCT_PACKAGES += \
     gps.msm8226
 
+#These aren't getting built for some reason!!!
 PRODUCT_PACKAGES += \
     wcnss_service \
     lib_driver_cmd_qcwcn \
@@ -40,7 +42,11 @@ PRODUCT_PACKAGES += \
     libvisualizer \
     libdownmix \
     libldnhncr \
-    dtbToolCM
+    dtbToolCM \
+    libshim_rmt_storage \
+    libshim_ril \
+    libboringssl-compat \
+    libxml2
     
 
 # Light
@@ -112,12 +118,7 @@ PRODUCT_PACKAGES += \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxEvrcEnc \
-    libOmxQcelp13Enc \
-    libdashplayer \
-    qcmediaplayer
-
-PRODUCT_BOOT_JARS += \
-    qcmediaplayer
+    libOmxQcelp13Enc
 
 # ramdisk
 PRODUCT_COPY_FILES += \
@@ -154,6 +155,13 @@ PRODUCT_COPY_FILES += \
      device/zte/warp4/ramdisk/res/images/charger/battery_low.png:root/res/images/charger/battery_low.png \
      device/zte/warp4/ramdisk/res/images/charger/battery_fail.png:root/res/images/charger/battery_fail.png
 
+#TWRP
+#PRODUCT_COPY_FILES += \
+#    device/zte/warp4/recovery/recovery.fstab:recovery/root/etc/twrp.fstab \
+
+#PRODUCT_COPY_FILES += \
+#    $(call find-copy-subdir-files,*,device/zte/warp4/recovery/root,recovery/root)
+
 # Prebuilt
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,device/zte/warp4/prebuilt/system,system)
@@ -178,6 +186,14 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.compass.xml:/system/etc/permissions/android.hardware.compass.xml \
     packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:/system/etc/permissions/android.software.live_wallpaper.xml \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:/system/etc/permissions/android.hardware.telephony.cdma.xml
+
+# ViPER4Android
+PRODUCT_PACKAGES += \
+    ViPER4Android \
+
+# KernelAdiutor-Mod
+PRODUCT_PACKAGES += \
+    KernelAdiutor-Mod \
 
 # DSPManager
 PRODUCT_PACKAGES += \
