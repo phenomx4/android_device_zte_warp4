@@ -4,7 +4,7 @@ $(call inherit-product-if-exists, vendor/zte/warp4/warp4-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/zte/warp4/overlay
 
-# This device is hdpi.
+# This device is xhdpi.
 PRODUCT_AAPT_CONFIG := normal xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 PRODUCT_LOCALES += xhdpi
@@ -24,7 +24,7 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    camera.msm8226
+    Snap
 
 # GPS
 PRODUCT_PACKAGES += \
@@ -40,9 +40,14 @@ PRODUCT_PACKAGES += \
     libvisualizer \
     libdownmix \
     libldnhncr \
-    dtbToolCM
+    dtbToolCM \
+    libshim_rmt_storage \
+    libshim_gps \
+    libcurl \
+    libboringssl-compat \
+    libxml2 \
+    libstlport
     
-
 # Light
 PRODUCT_PACKAGES += \
     lights.msm8226
@@ -68,6 +73,32 @@ PRODUCT_PACKAGES += \
 	audio.usb.default \
 	audio.r_submix.default \
 	libaudio-resampler
+
+
+# DSPManager
+PRODUCT_PACKAGES += \
+    DSPManager \
+    audio_effects.conf \
+    libcyanogen-dsp
+
+# Apollo
+PRODUCT_PACKAGES += \
+    Apollo \
+
+PRODUCT_PACKAGES += \
+	libdivxdrmdecrypt \
+	libstagefrighthw \
+    libmm-omxcore \
+    libOmxCore \
+    libc2dcolorconvert \
+    libOmxVdecHevc \
+    libstagefrighthw \
+    libOmxVdec \
+    libOmxVenc \
+    libOmxAacEnc \
+    libOmxAmrEnc \
+    libOmxEvrcEnc \
+    libOmxQcelp13Enc
 
 # Power
 PRODUCT_PACKAGES += \
@@ -100,59 +131,28 @@ PRODUCT_PACKAGES += \
 	librs_jni
 
 PRODUCT_PACKAGES += \
-	libdivxdrmdecrypt \
-	libstagefrighthw \
-    libmm-omxcore \
-    libOmxCore \
-    libc2dcolorconvert \
-    libOmxVdecHevc \
-    libstagefrighthw \
-    libOmxVdec \
-    libOmxVenc \
-    libOmxAacEnc \
-    libOmxAmrEnc \
-    libOmxEvrcEnc \
-    libOmxQcelp13Enc \
-    libdashplayer \
-    qcmediaplayer
+    fstab.qcom \
+    init.class_main.sh \
+    init.ftm.rc \
+    init.mdm.sh \
+    init.offcharge.rc \
+    init.qcom.class_core.sh \
+    init.qcom.early_boot.sh \
+    init.qcom.factory.sh \
+    init.qcom.ftm.rc \
+    init.qcom.rc \
+    init.qcom.ril.sh \
+    init.qcom.sh \
+    init.qcom.ssr.sh \
+    init.qcom.syspart_fixup.sh \
+    init.qcom.usb.rc \
+    init.qcom.usb.sh \
+    init.target.rc \
+    ueventd.qcom.rc \
 
-PRODUCT_BOOT_JARS += \
-    qcmediaplayer
-
-# ramdisk
-PRODUCT_COPY_FILES += \
-     device/zte/warp4/ramdisk/fstab.qcom:root/fstab.qcom \
-     device/zte/warp4/ramdisk/init.class_main.sh:root/init.class_main.sh \
-     device/zte/warp4/ramdisk/init.ftm.rc:root/init.ftm.rc \
-     device/zte/warp4/ramdisk/init.mdm.sh:root/init.mdm.sh \
-     device/zte/warp4/ramdisk/init.offcharge.rc:root/init.offcharge.rc \
-     device/zte/warp4/ramdisk/init.qcom.class_core.sh:root/init.qcom.class_core.sh \
-     device/zte/warp4/ramdisk/init.qcom.early_boot.sh:root/init.qcom.early_boot.sh \
-     device/zte/warp4/ramdisk/init.qcom.factory.sh:root/init.qcom.factory.sh \
-     device/zte/warp4/ramdisk/init.qcom.ftm.rc:root/init.qcom.ftm.rc \
-     device/zte/warp4/ramdisk/init.qcom.rc:root/init.qcom.rc \
-     device/zte/warp4/ramdisk/init.qcom.ril.sh:root/init.qcom.ril.sh \
-     device/zte/warp4/ramdisk/init.qcom.sh:root/init.qcom.sh \
-     device/zte/warp4/ramdisk/init.qcom.ssr.sh:root/init.qcom.ssr.sh \
-     device/zte/warp4/ramdisk/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
-     device/zte/warp4/ramdisk/init.qcom.usb.rc:root/init.qcom.usb.rc \
-     device/zte/warp4/ramdisk/init.qcom.usb.sh:root/init.qcom.usb.sh \
-     device/zte/warp4/ramdisk/init.target.rc:root/init.target.rc \
-     device/zte/warp4/ramdisk/ueventd.qcom.rc:root/ueventd.qcom.rc \
-     device/zte/warp4/ramdisk/res/images/charger/battery_0.png:root/res/images/charger/battery_0.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_1.png:root/res/images/charger/battery_1.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_2.png:root/res/images/charger/battery_2.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_3.png:root/res/images/charger/battery_3.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_4.png:root/res/images/charger/battery_4.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_5.png:root/res/images/charger/battery_5.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_6.png:root/res/images/charger/battery_6.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_7.png:root/res/images/charger/battery_7.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_8.png:root/res/images/charger/battery_8.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_9.png:root/res/images/charger/battery_9.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_10.png:root/res/images/charger/battery_10.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_full.png:root/res/images/charger/battery_full.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_low.png:root/res/images/charger/battery_low.png \
-     device/zte/warp4/ramdisk/res/images/charger/battery_fail.png:root/res/images/charger/battery_fail.png
+#TWRP
+#PRODUCT_COPY_FILES += \
+#    device/zte/warp4/recovery/recovery.fstab:recovery/twrp.fstab
 
 # Prebuilt
 PRODUCT_COPY_FILES += \
@@ -179,25 +179,13 @@ PRODUCT_COPY_FILES += \
     packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:/system/etc/permissions/android.software.live_wallpaper.xml \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:/system/etc/permissions/android.hardware.telephony.cdma.xml
 
-# DSPManager
-PRODUCT_PACKAGES += \
-    DSPManager \
-    audio_effects.conf \
-    libcyanogen-dsp
-
-# Apollo
-PRODUCT_PACKAGES += \
-    Apollo \
-
-PRODUCT_COPY_FILES += \
-    device/zte/warp4/dt.img:dt.img
 
 # We have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
 
-$(call inherit-product, build/target/product/full.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 
-$(call inherit-product, build/target/product/full_base_telephony.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/telephony.mk)
 
 $(call inherit-product-if-exists, vendor/zte/warp4/warp4-vendor.mk)
 

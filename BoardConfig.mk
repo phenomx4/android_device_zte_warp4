@@ -22,11 +22,6 @@ TARGET_CPU_VARIANT := krait
 # Architecture
 TARGET_CPU_SMP := true
 
-# Flags for Krait CPU
-TARGET_GLOBAL_CFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
-TARGET_GLOBAL_CPPFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
-COMMON_GLOBAL_CFLAGS += -D__ARM_USE_PLD -D__ARM_CACHE_LINE_SIZE=64
-
 # Krait optimizations
 TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
 TARGET_USE_KRAIT_BIONIC_OPTIMIZATION := true
@@ -44,19 +39,24 @@ TARGET_USERIMAGES_USE_EXT4 := true
 
 BOARD_USES_LEGACY_MMAP := true
 
+MALLOC_SVELTE := true
+
+TARGET_SPECIFIC_HEADER_PATH := device/zte/warp4/include
+
 # Kernel
 BOARD_KERNEL_SEPARATED_DT    := true
-TARGET_KERNEL_SOURCE         := kernel/warp4
+TARGET_KERNEL_SOURCE         := kernel/zte/android_kernel_zte_msm8226
 TARGET_KERNEL_CONFIG         := msm8226-zte-warp4_defconfig
 TARGET_KERNEL_SELINUX_CONFIG := selinux_defconfig
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00000000
-BOARD_MKBOOTIMG_ARGS := --dt device/zte/warp4/dt.img --ramdisk_offset 0x01000000 --tags_offset 0x00000100
+BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
 BOARD_KERNEL_PAGESIZE := 2048
-TARGET_SPECIFIC_HEADER_PATH := device/zte/warp4/include
+KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8/bin
+KERNEL_TOOLCHAIN_PREFIX := arm-eabi-
 
 BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 19777216
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1610612736
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 4840226816
 BOARD_CACHEIMAGE_PARTITION_SIZE := 838860800
@@ -77,7 +77,6 @@ BOARD_CHARGER_RES := device/zte/warp4/charger/res
 TARGET_POWERHAL_VARIANT := qcom
 BOARD_USES_QCOM_HARDWARE := true
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
-COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE
 
 # Graphics
 BOARD_EGL_CFG := device/zte/warp4/prebuilt/egl.cfg
@@ -93,15 +92,17 @@ ENABLE_WEBGL := true
 BOARD_USES_ALSA_AUDIO := true
 
 # Camera
-
+BOARD_GLOBAL_CFLAGS := -DCAMERA_VENDOR_L_COMPAT
 USE_DEVICE_SPECIFIC_CAMERA := true
+TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
+TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/zte/warp4/bluetooth
-BOARD_BLUEDROID_VENDOR_CONF := device/zte/warp4/bluetooth/vnd_awrp4.txt
+BOARD_BLUEDROID_VENDOR_CONF := device/zte/warp4/bluetooth/vnd_warp4.txt
 
 # Wifi
 TARGET_USES_WCNSS_CTRL          := true
@@ -117,12 +118,7 @@ WIFI_DRIVER_FW_PATH_AP 		:= "ap"
 WIFI_DRIVER_FW_PATH_P2P 	:= "p2p"
 WIFI_DRIVER_FW_PATH_STA 	:= "sta"
 WIFI_DRIVER_MODULE_ARG 		:= ""
-WIFI_DRIVER_MODULE_NAME 	:= "wlan"
-WIFI_DRIVER_MODULE_PATH 	:= "/system/lib/modules/wlan.ko"
 WPA_SUPPLICANT_VERSION 		:= VER_0_8_X
-
-# RIL
-BOARD_RIL_CLASS := ../../../device/zte/warp4/ril
 
 # GPS
 BOARD_HAVE_NEW_QC_GPS := true
@@ -156,13 +152,17 @@ BOARD_USES_QC_TIME_SERVICES := true
 #     time_daemon.te \
 #     ueventd.te
 
+
 # Recovery
 BOARD_KERNEL_RECOVERY_CMDLINE      := $(BOARD_KERNEL_CMDLINE)
-TARGET_RECOVERY_FSTAB := device/zte/warp4/ramdisk/fstab.qcom
+TARGET_RECOVERY_FSTAB := device/zte/warp4/rootdir/etc/fstab.qcom
 TARGET_RECOVERY_LCD_BACKLIGHT_PATH := \"/sys/class/leds/lcd-backlight/brightness\"
-COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
+BOARD_NO_SECURE_DISCARD := true
+TARGET_RECOVERY_DENSITY := hdpi
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 BOARD_HAS_LARGE_FILESYSTEM := true
+BOARD_NO_SECURE_DISCARD := true
+LZMA_RAMDISK_TARGETS := recovery
 
 #CWM
 BOARD_RECOVERY_SWIPE := true
@@ -182,7 +182,7 @@ RECOVERY_SDCARD_ON_DATA := true
 TW_ALWAYS_RMRF := true
 TW_CUSTOM_POWER_BUTTON := 107
 TW_DEFAULT_EXTERNAL_STORAGE := true
-TW_NO_REBOOT_BOOTLOADER := false
+TW_NO_REBOOT_BOOTLOADER := true
 TW_FLASH_FROM_STORAGE := true
 TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 TW_MAX_BRIGHTNESS := 255
