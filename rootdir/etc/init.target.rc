@@ -73,7 +73,6 @@ on init
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
 on boot
-
 #xym begin
     chown root system /proc/touchscreen/ts_information
 #xym end
@@ -103,9 +102,42 @@ on boot
     # Enable writing to brightness node under torch-light from userspace
     chown system system /sys/class/leds/torch-light/brightness
 
-#Start the qcom-system-daemon service
-service qcomsysd /system/bin/qcom-system-daemon
-    class main
+on property:ro.bootmode=chargerlogo
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 19D2
+    write /sys/class/android_usb/android0/idProduct 1353
+    write /sys/class/android_usb/android0/functions mass_storage
+    write /sys/class/android_usb/android0/enable 1
+
+    write /sys/module/lpm_levels/enable_low_power/l2 4
+    write /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled 1
+    write /sys/module/msm_thermal/core_control/enabled 0
+    write /sys/devices/system/cpu/cpu1/online 1
+    write /sys/devices/system/cpu/cpu2/online 1
+    write /sys/devices/system/cpu/cpu3/online 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "powersave"
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor "powersave"
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor "powersave"
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 300000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 300000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 300000
+    write /sys/module/msm_thermal/core_control/enabled 1
+    write /sys/devices/system/cpu/cpu1/online 0
+    write /sys/devices/system/cpu/cpu2/online 0
+    write /sys/devices/system/cpu/cpu3/online 0
+    class_reset main
+    class_reset late_start
+    class_start charger
+
+service charger /sbin/healthd -c
+    class charger
+    seclabel u:r:healthd:s0
 
 #start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
@@ -140,22 +172,6 @@ service thermal-engine /system/bin/thermal-engine
    user root
    group root
 
-service qrngd /system/bin/qrngd -f
-    class main
-    user root
-    group root
-
-
-service qrngp /system/bin/qrngp
-    class main
-    user root
-    group root
-    oneshot
-    disabled
-
-on property:sys.boot_completed=1
-    start qrngp
-
 service qseecomd /system/bin/qseecomd
     class late_start
     user root
@@ -170,8 +186,6 @@ service adsprpcd /system/bin/adsprpcd
    class main
    user media system
    group media system
-
-
 
 service wcnss-service /system/bin/wcnss_service
    class late_start
@@ -188,26 +202,41 @@ service ppd /system/bin/mm-pp-daemon
 on property:init.svc.surfaceflinger=stopped
     stop ppd
 
-
-service swapping /system/bin/sh /system/etc/enable_swap.sh
-    class core
-    user root
-    oneshot
-    
-#ZTE_lileyang_ItsOn_20130803
-service itsonbs /system/vendor/itson/itson-bootstrapper.sh
-    oneshot
-    critical
-#ZTE_lileyang_ItsOn_20130803
-
-#zte_bt_dm_20120110 add for 7x27A_*983*24474636# chipertest
-service bluetooth_prop /system/bin/sh /system/bin/init.btprop.sh
-    class late_start 
-    oneshot
-#20120110 end
-
-# jht 20130911 add init.wlanprop.sh +++
-service wlan_prop /system/bin/sh /system/etc/init.wlanprop.sh
-    class main
-    oneshot
-# jht 20130911 add init.wlanprop.sh ---
+on property:sys.boot_completed=1
+    write /sys/module/lpm_levels/enable_low_power/l2 4
+    write /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu0/standalone_power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/standalone_power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/standalone_power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/standalone_power_collapse/suspend_enabled 1
+    write /sys/module/msm_pm/modes/cpu0/standalone_power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/standalone_power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/standalone_power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/standalone_power_collapse/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu0/retention/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu1/retention/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu2/retention/idle_enabled 1
+    write /sys/module/msm_pm/modes/cpu3/retention/idle_enabled 1
+    write /sys/module/msm_thermal/core_control/enabled 0
+    write /sys/module/cpu_boost/parameters/input_boost_freq 787200
+    write /sys/devices/system/cpu/cpufreq/ondemand/input_boost 787200
+    write /sys/devices/system/cpu/cpufreq/ondemand/powersave_bias 1
+    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold 95
+    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load 90
+    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core 90
+    write /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate 120000
+    write /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor 1
+    write /sys/devices/system/cpu/cpufreq/ondemand/down_differential 5
+    write /sys/devices/system/cpu/cpufreq/ondemand/freq_step 10
+    write /sys/devices/system/cpu/sched_mc_power_savings 2
+    write /sys/module/msm_thermal/parameters/enabled "N"
+    write /sys/module/msm_thermal/core_control/enabled 1
+    start mpdecision
+    start qrngp

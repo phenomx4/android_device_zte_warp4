@@ -1,5 +1,4 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
-
 $(call inherit-product-if-exists, vendor/zte/warp4/warp4-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/zte/warp4/overlay
@@ -74,17 +73,13 @@ PRODUCT_PACKAGES += \
 	audio.r_submix.default \
 	libaudio-resampler
 
-
 # DSPManager
 PRODUCT_PACKAGES += \
     DSPManager \
     audio_effects.conf \
     libcyanogen-dsp
 
-# Apollo
-PRODUCT_PACKAGES += \
-    Apollo \
-
+# Omx
 PRODUCT_PACKAGES += \
 	libdivxdrmdecrypt \
 	libstagefrighthw \
@@ -104,47 +99,22 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	power.msm8226
 
-PRODUCT_PACKAGES += \
-	Torch \
-	FloatSysPop \
-	DeviceSettings
-
-# Charger
-PRODUCT_PACKAGES += \
-    zte_charger \
-    charger_res_images_zte
-
-# STK
-PRODUCT_PACKAGES += Stk
-
 # Filesystem management tools
 PRODUCT_PACKAGES += \
     make_ext4fs \
     e2fsck \
     setup_fs
 
-# Live Wallpapers
-PRODUCT_PACKAGES += \
-	LiveWallpapers \
-	LiveWallpapersPicker \
-	VisualizationWallpapers \
-	librs_jni
-
+# Rootdir
 PRODUCT_PACKAGES += \
     fstab.qcom \
     init.class_main.sh \
-    init.ftm.rc \
-    init.mdm.sh \
-    init.offcharge.rc \
-    init.qcom.class_core.sh \
+    init.qcom.bt.sh \
     init.qcom.early_boot.sh \
-    init.qcom.factory.sh \
-    init.qcom.ftm.rc \
     init.qcom.rc \
     init.qcom.ril.sh \
     init.qcom.sh \
     init.qcom.ssr.sh \
-    init.qcom.syspart_fixup.sh \
     init.qcom.usb.rc \
     init.qcom.usb.sh \
     init.target.rc \
@@ -152,11 +122,17 @@ PRODUCT_PACKAGES += \
 
 #TWRP
 #PRODUCT_COPY_FILES += \
-#    device/zte/warp4/recovery/recovery.fstab:recovery/twrp.fstab
+#    device/zte/warp4/recovery/recovery.fstab:recovery/root/etc/twrp.fstab
 
 # Prebuilt
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,device/zte/warp4/prebuilt/system,system)
+
+# Media
+PRODUCT_COPY_FILES += \
+    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -179,16 +155,12 @@ PRODUCT_COPY_FILES += \
     packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:/system/etc/permissions/android.software.live_wallpaper.xml \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:/system/etc/permissions/android.hardware.telephony.cdma.xml
 
-
 # We have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
-
 $(call inherit-product, $(SRC_TARGET_DIR)/product/telephony.mk)
-
 $(call inherit-product-if-exists, vendor/zte/warp4/warp4-vendor.mk)
-
 $(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=8
